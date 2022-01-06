@@ -8,7 +8,7 @@ test("renders app name link", () => {
       <App />
     </BrowserRouter>
   );
-  const linkElement = screen.findByText("GeronimoApp");
+  const linkElement = screen.findByText("BarokahGenisukmaApp");
   expect(linkElement).toBeDefined();
 });
 

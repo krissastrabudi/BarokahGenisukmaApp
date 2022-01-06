@@ -1,22 +1,27 @@
-﻿import React from "react";
+﻿import React, { lazy, Suspense } from "react";
 import { Switch, Route } from "react-router-dom";
-import "./App.css";
-import NavBar from "./components/NavBar/NavBar";
-import Footer from "./components/Footer/Footer";
 
-import Blank from "./components/Blank/Blank";
+const Login = lazy(() => import('./components/Login'))
+const Home = lazy(() => import('./components/Home'))
+const MasterSupplier = lazy(() => import('./components/MasterSupplier'))
+const MasterCustomer = lazy(() => import('./components/MasterCustomer'))
+const MasterBarang = lazy(() => import('./components/MasterBarang'))
 
 //TODO Web Template Studio: Add routes for your new pages here.
 const App = () => {
-    return (
+  return (
+    <Suspense fallback="Loading">
       <React.Fragment>
-        <NavBar />
         <Switch>
-          <Route exact path = "/" component = { Blank } />
+          <Route exact path="/" component={Login} />
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/masterSupplier" component={MasterSupplier} />
+          <Route exact path="/masterCustomer" component={MasterCustomer} />
+          <Route exact path="/masterBarang" component={MasterBarang} />
         </Switch>
-        <Footer />
       </React.Fragment>
-    );
+    </Suspense>
+  );
 }
 
 export default App;
