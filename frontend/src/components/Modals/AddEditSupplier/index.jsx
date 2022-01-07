@@ -33,7 +33,6 @@ const ModalAddEditSupplier = (props) => {
                         'x-auth-token': window.localStorage.getItem('TOKENBAROGENI'),
                     }
                 })
-                console.log(result);
                 Swal.fire('Sukses', result.data, 'success').then(async () => {
                     props.handleSearchSupplier(e)
                 })
