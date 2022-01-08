@@ -53,10 +53,10 @@ const MasterBarang = () => {
                                         </span>
                                         <span className='d-flex align-content-between justify-content-between'>
                                             <div>
-                                                <button type='button' className="btn btn-white mx-1" data-bs-toggle="modal" data-bs-target="#modalAddCustomer" onClick={() => setActivePage(0)}>Tambah Barang Baru</button>
+                                                <button type='button' className="btn btn-white mx-1" onClick={() => setActivePage(0)}>Tambah Barang Baru</button>
                                             </div>
                                             <div>
-                                                <button type='button' className="btn btn-white mx-1" data-bs-toggle="modal" data-bs-target="#modalAddCustomer" onClick={() => setActivePage(1)}>Cari & Edit Barang</button>
+                                                <button type='button' className="btn btn-white mx-1" onClick={() => setActivePage(1)}>Cari & Edit Barang</button>
                                             </div>
                                         </span>
                                     </div>
