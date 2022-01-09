@@ -40,10 +40,21 @@ router.get('/', async (req, res) => {
 
 router.get('/:idBarang', async (req, res) => {
     try {
-        let qry = `select * from barang_supplier where upper(id_barang)= ?`
+        let qry = `SELECT bs.*, s.nama_supplier FROM barang_supplier bs, supplier s WHERE s.id_supplier = bs.id_supplier and upper(bs.id_barang)= ? and bs.jumlah_barang>0`
         let result = await dbase.executeQueryWithParam(qry, [req.params.idBarang.toUpperCase()])
         res.status(200).send(result)
     } catch (error) {
+        return res.status(500).send(error.message)
+    }
+})
+
+router.put('/:idBarangSupplier', async (req, res) => {
+    try {
+        let qry = `update barang_supplier set id_supplier = ?, jumlah_barang = ?, satuan_barang = ?, harga_barang = ?, tanggal_masuk_barang = ? where id_barang_supplier = ?`
+        let result = await dbase.executeQueryWithParam(qry, [req.body.supplierSelected.idSupplier, req.body.formObj.jumlahBarang, req.body.formObj.satuanBarang, req.body.formObj.hargaBarang, req.body.formObj.tanggalMasukBarang, req.body.formObj.idBarangSupplier])
+        res.status(200).send("Berhasil mengubah data barang!")
+    } catch (error) {
+        console.log(error);
         return res.status(500).send(error.message)
     }
 })

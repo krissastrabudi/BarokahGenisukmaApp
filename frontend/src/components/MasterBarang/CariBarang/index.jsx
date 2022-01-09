@@ -2,26 +2,13 @@ import axios from 'axios'
 import React, { Fragment, useState } from 'react'
 import Pagination from '../../Helper/Pagination'
 
-const CariBarang = () => {
+const CariBarang = (props) => {
 
-
-    const [searchCriteria, setSearchCriteria] = useState()
-    const [isButtonClick, setIsButtonClick] = useState(false)
-    const [hasilSearchBarang, setHasilSearchBarang] = useState([])
-    const handleSearchBarang = async (e) => {
-        setIsButtonClick(true)
-        e.preventDefault()
-        const result = await axios.get(`/api/barangs?search_criteria=${searchCriteria}`, {
-            headers: {
-                "x-auth-token": window.localStorage.getItem("TOKENBAROGENI"),
-            }
-        })
-        setHasilSearchBarang(result.data)
+    const handleDetailBarang = (c) => {
+        props.loadDetailBarang(c)
+        props.setSelectedBarang(c)
+        props.setActivePage(2)
     }
-
-
-
-    const handleDetailBarang = useState({})
 
 
     //table pagination
@@ -29,24 +16,24 @@ const CariBarang = () => {
     const [postPerPage, setPostPerPage] = useState(10);
     const lastIndex = currentPage * 10;
     const firstIndex = lastIndex - 10;
-    const slicedArr = hasilSearchBarang.slice(firstIndex, lastIndex);
+    const slicedArr = props.hasilSearchBarang.slice(firstIndex, lastIndex);
 
     const checkTableListBarang = () => {
-        console.log(hasilSearchBarang.length);
-        if (hasilSearchBarang.length == 0 && isButtonClick == true) {
+        //console.log(hasilSearchBarang.length);
+        if (props.hasilSearchBarang.length == 0 && props.isButtonClick == true) {
             return (<Fragment>
                 <tr>
                     <td colSpan={2} className='align-middle text-center'>Tidak ada barang dengan kriteria pencarian yang diinputkan</td>
                 </tr>
             </Fragment>)
         }
-        else if (hasilSearchBarang.length > 0 && isButtonClick == true) {
+        else if (props.hasilSearchBarang.length > 0 && props.isButtonClick == true) {
             return (slicedArr.map((c, index) => {
                 return (
                     <tr key={c.id_barang}>
                         <td className='w-60'>{c.nama_barang}</td>
                         <td className='w-40 align-middle text-center' style={{ justifyContent: "space-between" }}>
-                            <button className="btn btn-secondary mx-2" data-bs-toggle="modal" data-bs-target="#modalAddCustomer" onClick={() => handleDetailBarang(c)}>Edit Data</button>
+                            <button className="btn btn-secondary mx-2" onClick={() => handleDetailBarang(c)}>Edit Data</button>
                         </td>
                     </tr>
                 )
@@ -64,9 +51,9 @@ const CariBarang = () => {
         </div>
         <div className="row mb-3">
             <div className="col-lg-12">
-                <form action="" onSubmit={handleSearchBarang}>
+                <form action="" onSubmit={props.handleSearchBarang}>
                     <div className="input-group mb-3">
-                        <input type="text" className="form-control" placeholder="Masukkan nama barang untuk dicari" aria-label="Masukkan nama barang" aria-describedby="button-addon2" name="searchCriteria" onChange={(e) => setSearchCriteria(e.target.value)} />
+                        <input type="text" className="form-control" placeholder="Masukkan nama barang untuk dicari" aria-label="Masukkan nama barang" aria-describedby="button-addon2" name="searchCriteria" onChange={(e) => props.setSearchCriteria(e.target.value)} value={props.searchCriteria} />
                         <button className="btn btn-secondary" type="submit" id="button-addon2"><i className="bi bi-search"></i></button>
                     </div>
                 </form>
@@ -91,7 +78,7 @@ const CariBarang = () => {
             </div>
         </div>
         <div className="row">
-            <Pagination currentPage={currentPage} postPerPage={postPerPage} array={hasilSearchBarang} setCurrentPage={setCurrentPage} showEntries={true} />
+            <Pagination currentPage={currentPage} postPerPage={postPerPage} array={props.hasilSearchBarang} setCurrentPage={setCurrentPage} showEntries={true} />
         </div>
     </Fragment>)
 }

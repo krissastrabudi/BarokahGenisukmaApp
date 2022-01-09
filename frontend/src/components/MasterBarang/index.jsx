@@ -8,12 +8,58 @@ const CariBarang = lazy(() => import('./CariBarang'))
 const EditBarang = lazy(() => import('./EditBarang'))
 const MasterBarang = () => {
 
+    const [searchCriteria, setSearchCriteria] = useState('')
+
+    const [isButtonClick, setIsButtonClick] = useState(false)
+    const [hasilSearchBarang, setHasilSearchBarang] = useState([])
+    const handleSearchBarang = async (e) => {
+        setIsButtonClick(true)
+        e.preventDefault()
+        const result = await axios.get(`/api/barangs?search_criteria=${searchCriteria}`, {
+            headers: {
+                "x-auth-token": window.localStorage.getItem("TOKENBAROGENI"),
+            }
+        })
+        setHasilSearchBarang(result.data)
+    }
+
+
+    const [selectedBarang, setSelectedBarang] = useState({})
+    const [detailBarang, setDetailBarang] = useState([])
+    const loadDetailBarang = async (c) => {
+        const result = await axios.get(`/api/barangs/${c.id_barang}`, {
+            headers: {
+                "x-auth-token": window.localStorage.getItem("TOKENBAROGENI"),
+            }
+        })
+        setDetailBarang(result.data)
+    }
+
     const [activePage, setActivePage] = useState(0)
     const renderActivePageMasterBarang = () => {
         let pages = [
-            <TambahBarang key={0} />,
-            <CariBarang key={1} />,
-            <EditBarang key={2} />
+            <TambahBarang
+                key={0}
+            />,
+            <CariBarang
+                key={1}
+                searchCriteria={searchCriteria}
+                setSearchCriteria={setSearchCriteria}
+                handleSearchBarang={handleSearchBarang}
+                isButtonClick={isButtonClick}
+                hasilSearchBarang={hasilSearchBarang}
+                setSelectedBarang={setSelectedBarang}
+                loadDetailBarang={loadDetailBarang}
+                setActivePage={setActivePage}
+            />,
+            <EditBarang
+                key={2}
+                handleSearchBarang={handleSearchBarang}
+                selectedBarang={selectedBarang}
+                setActivePage={setActivePage}
+                loadDetailBarang={loadDetailBarang}
+                detailBarang={detailBarang}
+            />
         ]
         return pages[activePage]
     }
